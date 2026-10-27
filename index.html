@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MPI Sejarah - Demokrasi Liberal</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:'Trebuchet MS','Segoe UI',sans-serif;background:#ecfdf5;color:#064e3b}
+.scr{display:none;min-height:100vh;padding:4.5rem 1rem 3rem;max-width:760px;margin:auto}
+.scr.on{display:block}
+.btn{background:#16a34a;color:#fff;font-weight:700;border-radius:.75rem;padding:.65rem 1.1rem;box-shadow:0 4px 0 #166534;transition:.15s;cursor:pointer}
+.btn:hover{background:#15803d;transform:translateY(-2px)}
+.btn:active{transform:translateY(2px);box-shadow:none}
+.btn.alt{background:#fff;color:#166534;border:2px solid #16a34a;box-shadow:0 4px 0 #bbf7d0}
+.btn.alt:hover{background:#dcfce7}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.card{background:#fff;border-radius:1rem;padding:1rem;box-shadow:0 2px 8px #0001;border:1px solid #bbf7d0}
+.btn.ok,.ok{background:#86efac!important;color:#064e3b!important}
+.btn.no,.no{background:#fca5a5!important;color:#7f1d1d!important}
+.btn.sel{background:#fde047!important;color:#422006!important}
+@keyframes pop{from{opacity:0;transform:scale(.5) translateY(40px)}to{opacity:1;transform:none}}
+.pop{animation:pop .9s cubic-bezier(.2,1.4,.4,1) both}
+.d2{animation-delay:.5s}.d3{animation-delay:1s}
+@media print{#home,#foot,.noprint{display:none!important}}
+@media(prefers-reduced-motion:reduce){.pop{animation:none}}
+</style>
+</head>
+<body>
+<button id="home" class="btn fixed top-3 left-3 z-50 hidden" onclick="show('menu')">🏠 HOME</button>
+<div id="foot" class="fixed bottom-0 inset-x-0 text-center text-xs py-1 bg-green-800 text-green-50 z-40">Pengembang: Esti Raspati, S.Pd. &middot; 2026</div>
+
+<!-- SPLASH -->
+<section id="splash" class="scr on text-center flex flex-col justify-center items-center" style="padding-top:2rem">
+  <div class="text-7xl pop">🗳️</div>
+  <h1 class="text-5xl sm:text-7xl font-black text-green-800 pop d2 leading-tight mt-4">DEMOKRASI<br>LIBERAL</h1>
+  <p class="text-xl font-bold text-green-700 pop d3 mt-3">Indonesia 1950 &ndash; 1959</p>
+  <p class="pop d3 text-sm mt-1">Media Pembelajaran Interaktif Sejarah &middot; Kelas XII SMA</p>
+  <button class="btn text-2xl px-10 py-4 mt-8 pop d3" onclick="mulai()">MULAI</button>
+</section>
+
+<!-- MENU -->
+<section id="menu" class="scr">
+  <h2 class="text-3xl font-black text-center text-green-800 mb-5">Menu Utama</h2>
+  <div class="grid grid-cols-2 gap-4">
+    <button class="btn py-8 text-xl" onclick="show('beranda')">🏡<br>BERANDA</button>
+    <button class="btn py-8 text-xl" onclick="openMateri()">📖<br>MATERI</button>
+    <button class="btn py-8 text-xl" onclick="show('sim')">🎯<br>SIMULASI</button>
+    <button class="btn py-8 text-xl" onclick="openKuis()">🎮<br>KUIS</button>
+  </div>
+  <div class="card mt-6">
+    <b>⚙️ Pengaturan</b>
+    <div class="flex items-center gap-3 mt-2 flex-wrap">
+      <button id="mtog" class="btn" onclick="togMusik()">🎵 Musik: ON</button>
+      <label class="flex items-center gap-2 text-sm font-bold">🔊 Volume
+        <input id="vol" type="range" min="0" max="100" value="60" oninput="setVol(this.value)">
+      </label>
+    </div>
+  </div>
+</section>
+
+<!-- BERANDA -->
+<section id="beranda" class="scr">
+  <h2 class="text-3xl font-black text-green-800 mb-3">Beranda</h2>
+  <div class="card mb-3"><b>Tujuan Pembelajaran</b>
+    <p class="mt-1">Peserta didik dapat menganalisis kehidupan politik, ekonomi, dan gejolak daerah di Indonesia pada masa Demokrasi Liberal (1950&ndash;1959).</p></div>
+  <div class="card mb-3"><b>Petunjuk</b>
+    <ol class="list-decimal ml-5 mt-1 text-sm space-y-1">
+      <li><b>Materi</b>: pilih tab, lalu klik judul untuk membuka penjelasan.</li>
+      <li><b>Simulasi</b>: isi nama, kerjakan 10 soal, dapatkan sertifikat.</li>
+      <li><b>Kuis</b>: 4 permainan, tiap permainan punya 3 level. Lulus level (nilai 60%+) untuk membuka level berikutnya.</li>
+    </ol></div>
+  <div class="card text-sm">Mata Pelajaran: Sejarah &middot; Kelas XII SMA<br>Pengembang: <b>Esti Raspati, S.Pd.</b> (2026)</div>
+</section>
+
+<!-- MATERI -->
+<section id="materi" class="scr">
+  <h2 class="text-3xl font-black text-green-800 mb-3">Materi</h2>
+  <div id="tabs" class="flex flex-wrap gap-2 mb-3"></div>
+  <div id="mbody" class="space-y-2"></div>
+</section>
+
+<!-- SIMULASI -->
+<section id="sim" class="scr">
+  <h2 class="text-3xl font-black text-green-800 mb-3">Simulasi</h2>
+  <div class="card">
+    <p class="mb-2">10 soal uji pemahaman: Pilihan Ganda, Drag the Word, dan Mark the Word. Tulis namamu dulu.</p>
+    <input id="nama" type="text" maxlength="40" autocomplete="off" placeholder="Nama lengkap siswa"
+      class="w-full border-2 border-green-600 rounded-lg px-3 py-2 text-lg bg-white text-green-900 outline-none focus:ring-2 focus:ring-green-400">
+    <p id="nerr" class="hidden text-red-600 text-sm mt-1">Nama belum diisi.</p>
+    <button class="btn mt-3" onclick="sStart()">MULAI SIMULASI</button>
+  </div>
+</section>
+<section id="simq" class="scr"><div id="sb"></div></section>
+
+<!-- SERTIFIKAT -->
+<section id="certs" class="scr"><div id="cert"></div>
+  <div class="flex gap-2 mt-4 justify-center noprint">
+    <button class="btn" onclick="print()">🖨️ CETAK</button>
+    <button class="btn alt" onclick="show('menu')">MENU UTAMA</button>
+  </div>
+</section>
+
+<!-- KUIS -->
+<section id="kuis" class="scr">
+  <h2 class="text-3xl font-black text-green-800 mb-3">Kuis</h2>
+  <div id="klist"></div>
+</section>
+<section id="game" class="scr"><div id="gb"></div></section>
+
+<script>
+/* ====== KONFIGURASI NILAI KE SPREADSHEET ======
+ Tempel URL Web App (Google Apps Script) di bawah ini agar nilai tersimpan ke spreadsheet. */
+const SHEET_URL='';
+
+const $=s=>document.querySelector(s);
+const sh=a=>[...a].sort(()=>Math.random()-.5);
+let NAMA='';
+
+/* ====== AUDIO (disintesis, tanpa file eksternal) ====== */
+let AC,master,musicOn=true,vol=.6,mi=0;
+function audio(){
+  if(!AC){AC=new(window.AudioContext||window.webkitAudioContext)();master=AC.createGain();master.gain.value=vol;master.connect(AC.destination)}
+  if(AC.state==='suspended')AC.resume();
+}
+function tone(f,d,type,v,dl){
+  if(!AC)return;const t=AC.currentTime+(dl||0),o=AC.createOscillator(),g=AC.createGain();
+  o.type=type||'sine';o.frequency.value=f;g.gain.setValueAtTime(v||.3,t);g.gain.exponentialRampToValueAtTime(.001,t+d);
+  o.connect(g);g.connect(master);o.start(t);o.stop(t+d);
+}
+function sfx(k){
+  if(!AC)return;
+  if(k==='ok'){tone(660,.12,'square',.15);tone(880,.2,'square',.15,.1)}
+  else if(k==='bad'){tone(220,.25,'sawtooth',.15)}
+  else if(k==='win'){[523,659,784,1047].forEach((f,i)=>tone(f,.25,'triangle',.25,i*.13))}
+  else tone(700,.07,'square',.12);
+}
+const MEL=[523,587,659,784,659,587,523,392,440,523,587,659,587,523,440,392];
+function startMusic(){setInterval(()=>{if(!musicOn||!AC)return;tone(MEL[mi%16],.3,'triangle',.08);if(mi%4===0)tone(MEL[mi%16]/2,.4,'sine',.06);mi++},300)}
+function togMusik(){musicOn=!musicOn;$('#mtog').textContent='🎵 Musik: '+(musicOn?'ON':'OFF')}
+function setVol(v){vol=v/100;if(master)master.gain.value=vol}
+document.addEventListener('click',e=>{if(e.target.closest('button'))sfx()});
+
+/* ====== NAVIGASI ====== */
+function show(id){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  $('#'+id).classList.add('on');
+  $('#home').classList.toggle('hidden',id==='splash');
+  scrollTo(0,0);
+}
+function mulai(){audio();startMusic();show('menu')}
+
+/* ====== MATERI ====== */
+const M=[
+['Latar & Ciri',[
+['Apa itu Demokrasi Liberal?','Periode 1950–1959 ketika Indonesia memakai UUDS 1950 dan sistem pemerintahan parlementer. Kekuasaan berpusat pada parlemen dan partai-partai politik.'],
+['Ciri utama','Presiden hanya kepala negara (simbol). Perdana Menteri memimpin kabinet yang bertanggung jawab kepada DPR. Karena itu kabinet mudah jatuh-bangun jika kehilangan dukungan parlemen.'],
+['Latar belakang','Setelah kembali menjadi negara kesatuan pada 17 Agustus 1950, Indonesia menetapkan UUDS 1950 yang menganut demokrasi parlementer ala Barat.']]],
+['Kabinet',[
+['Natsir (Sep 1950–Mar 1951)','Masyumi. Terkenal dengan Mosi Integral Natsir yang menyatukan negara bagian ke dalam NKRI. Jatuh karena mosi tidak percaya soal PP No. 39/1950.'],
+['Sukiman (Apr 1951–Feb 1952)','Masyumi–PNI. Jatuh karena pertukaran nota dengan Amerika Serikat (Mutual Security Act) yang dinilai melanggar politik bebas aktif.'],
+['Wilopo (Apr 1952–Jun 1953)','PNI. Menghadapi Peristiwa 17 Oktober 1952 (konflik TNI AD dengan parlemen) dan Peristiwa Tanjung Morawa.'],
+['Ali Sastroamidjojo I (Jul 1953–Jul 1955)','PNI–NU. Menyelenggarakan Konferensi Asia Afrika di Bandung (April 1955). Program Ali-Baba.'],
+['Burhanuddin Harahap (Aug 1955–Mar 1956)','Masyumi. Berhasil melaksanakan Pemilu 1955.'],
+['Ali Sastroamidjojo II (Mar 1956–Mar 1957)','Membatalkan hasil KMB secara sepihak. Jatuh akibat gejolak daerah dan mundurnya Masyumi.'],
+['Djuanda / Kabinet Karya (Apr 1957–Jul 1959)','Kabinet non-partai. Mengeluarkan Deklarasi Djuanda 13 Desember 1957 tentang wilayah laut Indonesia sebagai satu kesatuan.']]],
+['Pemilu 1955',[
+['Waktu','Pemilu pertama Indonesia: 29 September 1955 (memilih anggota DPR) dan 15 Desember 1955 (memilih anggota Konstituante).'],
+['Hasil','Empat partai terbesar: PNI, Masyumi, NU, dan PKI. Pemilu ini dinilai jujur, adil, dan demokratis.'],
+['Dampak','Pemilu sukses tetapi tidak menghasilkan pemerintahan stabil, karena parlemen terpecah ke banyak partai dengan ideologi berbeda.']]],
+['Gejolak Daerah',[
+['Pemberontakan bersenjata','APRA (Westerling, 1950), Andi Azis (Makassar, 1950), RMS (Maluku, 1950), DI/TII (Jawa Barat, Sulawesi Selatan, Aceh, Kalimantan Selatan).'],
+['PRRI dan Permesta','Akhir 1950-an di Sumatera dan Sulawesi. Dipicu kekecewaan daerah pada pemerintah pusat soal pembagian keuangan dan pembangunan yang tidak merata.'],
+['Peristiwa Pusat','Peristiwa 17 Oktober 1952 dan Peristiwa 27 Juni 1955 (masalah pimpinan Angkatan Darat) memperlihatkan ketegangan sipil–militer.']]],
+['Ekonomi',[
+['Gunting Syafruddin','20 Maret 1950. Uang bernilai Rp5 ke atas digunting menjadi dua untuk menekan inflasi dan mengisi kas negara.'],
+['Sistem Benteng','Dirancang Sumitro Djojohadikusumo (Kabinet Natsir). Memberi lisensi impor kepada pengusaha pribumi, tetapi banyak disalahgunakan.'],
+['Nasionalisasi dan Ali-Baba','De Javasche Bank dinasionalisasi (1951). Program Ali-Baba mengajak pengusaha pribumi (Ali) bermitra dengan pengusaha non-pribumi (Baba).'],
+['Mengapa ekonomi sulit stabil?','Kabinet cepat berganti sehingga program tidak berkelanjutan, inflasi tinggi, dan ekspor masih bergantung pada hasil bumi.']]],
+['Berakhirnya',[
+['Konstituante gagal','Konstituante bersidang sejak 1956 tetapi gagal merumuskan UUD baru karena perdebatan dasar negara tidak menemukan titik temu.'],
+['Dekrit Presiden 5 Juli 1959','Soekarno membubarkan Konstituante, memberlakukan kembali UUD 1945, dan membentuk MPRS serta DPAS. Era Demokrasi Terpimpin dimulai.'],
+['Analisis','Demokrasi Liberal runtuh karena kabinet tidak stabil, persaingan ideologi antarpartai, pemberontakan daerah, dan masalah ekonomi.']]]
+];
+function openMateri(){show('materi');tab(0)}
+function tab(i){
+  $('#tabs').innerHTML=M.map((m,j)=>`<button class="btn ${j===i?'':'alt'}" onclick="tab(${j})">${m[0]}</button>`).join('');
+  $('#mbody').innerHTML=M[i][1].map(p=>`<details class="card"><summary class="font-bold cursor-pointer">${p[0]}</summary><p class="mt-2">${p[1]}</p></details>`).join('')
+   +'<p class="text-xs text-green-700">Klik judul untuk membuka penjelasan.</p>';
+}
+
+/* ====== SIMULASI ====== */
+const Q=[
+{k:'mc',q:'Demokrasi Liberal di Indonesia berlangsung pada tahun...',o:['1945–1949','1950–1959','1959–1965','1966–1998'],a:1,e:'Periode ini berlangsung 1950–1959 dengan UUDS 1950.'},
+{k:'mc',q:'Ciri utama sistem pemerintahan pada masa Demokrasi Liberal adalah...',o:['Presiden memimpin kabinet','Kabinet bertanggung jawab kepada parlemen','MPR memilih presiden','Militer memegang kekuasaan'],a:1,e:'Sistem parlementer: kabinet bertanggung jawab kepada DPR.'},
+{k:'dr',s:'Perdana Menteri pertama dari Masyumi yang terkenal dengan Mosi Integral adalah Mohammad __.',c:['Natsir','Wilopo','Djuanda'],a:'Natsir',e:'Mosi Integral Natsir (1950) menyatukan negara bagian ke dalam NKRI.'},
+{k:'mc',q:'Pemilu pertama tahun 1955 terlaksana pada masa kabinet...',o:['Natsir','Wilopo','Burhanuddin Harahap','Djuanda'],a:2,e:'Pemilu 1955 dilaksanakan Kabinet Burhanuddin Harahap.'},
+{k:'dr',s:'Kebijakan pemotongan nilai uang 20 Maret 1950 dikenal dengan sebutan __ Syafruddin.',c:['Benteng','Gunting','Ali-Baba'],a:'Gunting',e:'Gunting Syafruddin dilakukan untuk menekan inflasi.'},
+{k:'mk',w:'Dalam sistem parlementer, Presiden menjadi kepala pemerintahan yang memimpin kabinet.',a:3,t:'Klik satu kata yang SALAH.',e:'Yang memimpin kabinet adalah Perdana Menteri; Presiden hanya kepala negara.'},
+{k:'mc',q:'Dekrit Presiden 5 Juli 1959 berisi, kecuali...',o:['Pembubaran Konstituante','Berlakunya kembali UUD 1945','Pembentukan MPRS dan DPAS','Pemberlakuan UUDS 1950 selamanya'],a:3,e:'Dekrit justru mengakhiri UUDS 1950.'},
+{k:'dr',s:'Konferensi Asia Afrika 1955 diselenggarakan di kota __ pada masa Kabinet Ali Sastroamidjojo I.',c:['Jakarta','Bandung','Yogyakarta'],a:'Bandung',e:'KAA dilaksanakan 18–24 April 1955 di Bandung.'},
+{k:'mk',w:'Deklarasi Djuanda 1957 dikeluarkan oleh Perdana Menteri Natsir.',a:5,t:'Klik satu kata yang SALAH.',e:'Deklarasi Djuanda dikeluarkan oleh Perdana Menteri Djuanda.'},
+{k:'mk',w:'Hasil Pemilu 1955 menempatkan PKI sebagai partai dengan suara terbanyak.',a:5,t:'Klik satu kata yang SALAH.',e:'Suara terbanyak diraih PNI; PKI berada di urutan keempat.'}
+];
+let S={i:0,c:0,done:false,pick:null};
+function sStart(){
+  const n=$('#nama').value.trim();
+  if(!n){$('#nerr').classList.remove('hidden');$('#nama').focus();return}
+  NAMA=n;S={i:0,c:0,done:false,pick:null};show('simq');sq();
+}
+$('#nama').addEventListener('keydown',e=>{if(e.key==='Enter')sStart()});
+function sq(){
+  const q=Q[S.i];S.done=false;S.pick=null;
+  let h=`<div class="text-sm font-bold mb-2">Soal ${S.i+1} dari 10 &middot; ${{mc:'Pilihan Ganda',dr:'Drag the Word',mk:'Mark the Word'}[q.k]}</div>`;
+  if(q.k==='mc')h+=`<div class="card font-bold mb-3">${q.q}</div><div id="opt">`+q.o.map((o,j)=>`<button class="btn alt block w-full text-left mb-2" onclick="sA(${j})">${'ABCD'[j]}. ${o}</button>`).join('')+'</div>';
+  if(q.k==='dr'){const p=q.s.split('__');
+    h+=`<div class="card mb-3 text-lg">Seret kata ke kotak kosong (atau ketuk kata).<br><br>${p[0]}<span id="bl" ondragover="event.preventDefault()" ondrop="sPut(event.dataTransfer.getData('text'))" class="inline-block min-w-[110px] border-b-4 border-green-600 text-center font-bold px-2">&nbsp;</span>${p[1]}</div>
+    <div class="flex gap-2 flex-wrap mb-3">`+sh(q.c).map(c=>`<button draggable="true" ondragstart="event.dataTransfer.setData('text','${c}')" onclick="sPut('${c}')" class="btn alt">${c}</button>`).join('')+'</div><button class="btn" onclick="sChk()">PERIKSA</button>';}
+  if(q.k==='mk')h+=`<div class="card mb-3 font-bold">${q.t}</div><div id="opt" class="card">`+q.w.split(' ').map((w,j)=>`<button class="btn alt m-1" onclick="sM(${j})">${w}</button>`).join('')+'</div>';
+  h+='<div id="fb" class="mt-3 font-bold"></div><button id="nx" class="btn mt-3 hidden" onclick="sN()"></button>';
+  $('#sb').innerHTML=h;
+}
+function sFin(ok){
+  if(S.done)return;S.done=true;const q=Q[S.i];if(ok)S.c++;
+  $('#fb').innerHTML=(ok?'✅ Benar! ':'❌ Belum tepat. ')+q.e;sfx(ok?'ok':'bad');
+  const n=$('#nx');n.textContent=S.i===9?'LIHAT HASIL':'LANJUT';n.classList.remove('hidden');
+}
+function sA(j){if(S.done)return;const b=document.querySelectorAll('#opt button'),a=Q[S.i].a;b[a].classList.add('ok');if(j!==a)b[j].classList.add('no');sFin(j===a)}
+function sPut(w){if(S.done)return;S.pick=w;$('#bl').textContent=w}
+function sChk(){if(S.done)return;if(!S.pick){$('#fb').textContent='Pilih kata dulu.';return}sFin(S.pick===Q[S.i].a)}
+function sM(j){if(S.done)return;const b=document.querySelectorAll('#opt button'),a=Q[S.i].a;b[a].classList.add('ok');if(j!==a)b[j].classList.add('no');sFin(j===a)}
+function sN(){S.i++;if(S.i<10)sq();else{sfx('win');selesai()}}
+function selesai(){
+  const nilai=S.c*10,tgl=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+  const pred=nilai>=90?'Sangat Baik':nilai>=75?'Baik':nilai>=60?'Cukup':'Perlu Berlatih';
+  kirim({nama:NAMA,nilai:nilai,benar:S.c,tanggal:new Date().toISOString(),materi:'Demokrasi Liberal'});
+  $('#cert').innerHTML=`<div class="bg-white border-8 border-double border-green-700 rounded-lg p-6 text-center">
+  <div class="text-5xl">🏅</div>
+  <h2 class="text-3xl font-black text-green-800 mt-2">SERTIFIKAT PENCAPAIAN</h2>
+  <p class="mt-4">Diberikan kepada</p>
+  <p class="text-3xl font-black text-green-900 my-2 break-words">${NAMA.replace(/</g,'&lt;')}</p>
+  <p>atas keberhasilan menyelesaikan simulasi<br><b>Sejarah: Indonesia pada Masa Demokrasi Liberal</b></p>
+  <p class="text-5xl font-black text-green-700 my-3">${nilai}</p>
+  <p class="font-bold">Predikat: ${pred} (${S.c}/10 benar)</p>
+  <p class="text-sm mt-3">${tgl}</p>
+  <p class="text-sm mt-4">Pengembang MPI: Esti Raspati, S.Pd. &middot; 2026</p>
+  <p class="text-xs mt-2 text-green-700 noprint">${SHEET_URL?'Nilai terkirim ke spreadsheet.':'Spreadsheet belum dihubungkan (isi SHEET_URL di kode).'}</p></div>`;
+  show('certs');
+}
+function kirim(d){
+  try{localStorage.setItem('mpi_'+Date.now(),JSON.stringify(d))}catch(e){}
+  if(SHEET_URL)fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(d)}).catch(()=>{});
+}
+
+/* ====== KUIS: 4 GAME x 3 LEVEL ====== */
+const P=[['Natsir','Mosi Integral'],['Ali Sastroamidjojo I','Konferensi Asia Afrika'],['Burhanuddin Harahap','Pemilu 1955'],['Djuanda','Deklarasi Djuanda'],['Sukiman','Pertukaran nota dengan AS'],['Wilopo','Peristiwa 17 Oktober 1952'],['Ali Sastroamidjojo II','Pembatalan KMB']];
+const GM=[
+{n:'Kilat Pilihan',ic:'⚡',d:'Jawab pilihan ganda dengan cepat.',t:'mc',L:[
+ [['Demokrasi Liberal berlaku tahun...',['1945–1949','1950–1959','1959–1965','1966–1998'],1],['Sistem pemerintahan saat itu adalah...',['Presidensial','Parlementer','Monarki','Komunis'],1],['Konstitusi yang berlaku saat itu...',['UUD 1945','Konstitusi RIS','UUDS 1950','TAP MPR'],2]],
+ [['Pemilu pertama Indonesia digelar tahun...',['1950','1955','1957','1959'],1],['Perdana Menteri pertama masa Demokrasi Liberal...',['Natsir','Wilopo','Sukiman','Ali Sastroamidjojo'],0],['KAA 1955 diselenggarakan di...',['Jakarta','Bogor','Bandung','Surabaya'],2]],
+ [['Deklarasi Djuanda menyatakan...',['Laut sebagai satu kesatuan wilayah','Kembali ke UUD 1945','Nasionalisasi bank','Pemilu dipercepat'],0],['Kabinet yang jatuh akibat pertukaran nota dengan AS...',['Natsir','Sukiman','Wilopo','Burhanuddin'],1],['Kegagalan ... mendorong Dekrit 5 Juli 1959',['DPR','Konstituante','DPA','BPK'],1]]]},
+{n:'Benar atau Salah',ic:'✅',d:'Tentukan pernyataan benar atau salah.',t:'tf',L:[
+ [['Pemilu 1955 dilaksanakan dalam dua tahap.',1],['Demokrasi Liberal berakhir dengan Dekrit Presiden 1959.',1],['Pada masa itu Presiden memimpin kabinet secara langsung.',0]],
+ [['Gunting Syafruddin memotong nilai uang pada tahun 1950.',1],['Program Ali-Baba menggandeng pengusaha pribumi dan non-pribumi.',1],['PRRI/Permesta terjadi pada tahun 1945.',0],['Konstituante berhasil menyusun UUD baru.',0]],
+ [['Peristiwa 17 Oktober 1952 terjadi pada masa Kabinet Natsir.',0],['Partai pemenang suara terbanyak Pemilu 1955 adalah PNI.',1],['Kabinet Djuanda disebut Kabinet Karya dan bersifat non-partai.',1],['Sistem Benteng dirancang oleh Sumitro Djojohadikusumo.',1],['APRA dipimpin oleh Kartosuwiryo.',0]]]},
+{n:'Pasangkan',ic:'🧩',d:'Cocokkan tokoh/kabinet dengan peristiwanya.',t:'mt',L:[P.slice(0,3),P.slice(0,5),P.slice(0,7)]},
+{n:'Acak Kata',ic:'🔤',d:'Susun huruf acak, lalu ketik jawabannya.',t:'sc',L:[
+ [['Kota tempat KAA 1955','BANDUNG'],['Konstitusi sementara 1950 (singkatan)','UUDS'],['Tokoh Mosi Integral','NATSIR']],
+ [['Partai besar Pemilu 1955 selain PNI, NU, PKI','MASYUMI'],['Perdana Menteri Kabinet Karya','DJUANDA'],['Lembaga pembuat UUD hasil Pemilu 1955','KONSTITUANTE']],
+ [['Sistem impor yang membantu pengusaha pribumi','BENTENG'],['Pemimpin DI/TII Jawa Barat','KARTOSUWIRYO'],['Pemimpin APRA','WESTERLING']]]}
+];
+let unl=[1,1,1,1],G={};
+function openKuis(){
+  $('#klist').innerHTML=GM.map((g,gi)=>`<div class="card mb-3"><b class="text-lg">${g.ic} ${g.n}</b><p class="text-sm">${g.d}</p><div class="flex gap-2 mt-2 flex-wrap">`+
+  [0,1,2].map(l=>`<button class="btn ${l<unl[gi]?'':'alt'}" ${l<unl[gi]?'':'disabled'} onclick="play(${gi},${l})">Level ${l+1}${l<unl[gi]?'':' 🔒'}</button>`).join('')+'</div></div>').join('');
+  show('kuis');
+}
+function play(gi,l){G={gi,l,i:0,s:0,err:0,lock:false,sel:null,items:GM[gi].L[l]};show('game');rg()}
+function head(){return `<div class="text-sm font-bold mb-2">${GM[G.gi].ic} ${GM[G.gi].n} &middot; Level ${G.l+1} &middot; Skor ${G.s}</div>`}
+function rg(){
+  const g=GM[G.gi],n=G.items.length;
+  if(g.t!=='mt'&&G.i>=n)return gEnd(G.s,n);
+  let h=head();
+  if(g.t==='mt'){
+    const R=sh(G.items.map(p=>p[1]));
+    h+='<div class="card mb-3 text-sm">Ketuk satu item di kiri, lalu pasangannya di kanan.</div><div class="grid grid-cols-2 gap-2"><div>'+
+    G.items.map((p,i)=>`<button class="btn alt block w-full mb-2 text-sm" data-l="${p[0]}" onclick="mL(this)">${p[0]}</button>`).join('')+'</div><div>'+
+    R.map(r=>`<button class="btn alt block w-full mb-2 text-sm" data-r="${r}" onclick="mR(this)">${r}</button>`).join('')+'</div></div>';
+    G.done=0;G.sel=null;
+  }else{
+    const it=G.items[G.i];
+    h+=`<div class="text-sm mb-1">Soal ${G.i+1} dari ${n}</div><div class="card font-bold mb-3">${g.t==='sc'?it[0]:it[0]}</div><div id="opt">`;
+    if(g.t==='mc')h+=it[1].map((o,j)=>`<button class="btn alt block w-full text-left mb-2" onclick="gA(${j})">${o}</button>`).join('');
+    if(g.t==='tf')h+='<div class="flex gap-3"><button class="btn flex-1" onclick="gA(1)">BENAR</button><button class="btn alt flex-1" onclick="gA(0)">SALAH</button></div>';
+    if(g.t==='sc'){let z=it[1],x=z;for(let k=0;k<9&&x===z;k++)x=sh(z.split('')).join('');
+      h+=`<div class="text-3xl font-black tracking-widest text-center text-green-700 mb-3">${x.split('').join(' ')}</div>
+      <input id="ans" type="text" autocomplete="off" autocapitalize="characters" placeholder="Ketik jawabanmu" class="w-full border-2 border-green-600 rounded-lg px-3 py-2 text-lg bg-white text-green-900 outline-none focus:ring-2 focus:ring-green-400">
+      <button class="btn mt-3" onclick="gS()">CEK</button>`;}
+    h+='</div><div id="fb" class="mt-3 font-bold"></div>';
+  }
+  $('#gb').innerHTML=h;
+  const a=$('#ans');if(a){a.focus();a.addEventListener('keydown',e=>{if(e.key==='Enter')gS()})}
+}
+function gNext(ok,msg){
+  G.lock=true;if(ok)G.s++;sfx(ok?'ok':'bad');
+  $('#fb').textContent=(ok?'✅ Benar! ':'❌ Salah. ')+(msg||'');
+  setTimeout(()=>{G.i++;G.lock=false;rg()},1100);
+}
+function gA(j){
+  if(G.lock)return;const g=GM[G.gi],it=G.items[G.i],a=g.t==='mc'?it[2]:it[1];
+  if(g.t==='mc'){const b=document.querySelectorAll('#opt button');b[a].classList.add('ok');if(j!==a)b[j].classList.add('no')}
+  gNext(j===a,g.t==='tf'?'Jawaban: '+(a?'Benar':'Salah'):'');
+}
+function gS(){
+  if(G.lock)return;const v=$('#ans').value.trim().toUpperCase().replace(/[^A-Z]/g,''),w=G.items[G.i][1];
+  if(!v){$('#fb').textContent='Ketik jawaban dulu.';return}
+  gNext(v===w,'Jawaban: '+w);
+}
+function mL(b){if(b.disabled)return;document.querySelectorAll('[data-l]').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');G.sel=b}
+function mR(b){
+  if(b.disabled||!G.sel)return;
+  const p=G.items.find(p=>p[0]===G.sel.dataset.l);
+  if(p[1]===b.dataset.r){G.sel.classList.remove('sel');G.sel.classList.add('ok');b.classList.add('ok');G.sel.disabled=b.disabled=true;G.sel=null;sfx('ok');
+    if(++G.done===G.items.length)setTimeout(()=>gEnd(Math.max(0,G.items.length-G.err),G.items.length),700)}
+  else{G.err++;sfx('bad');b.classList.add('no');setTimeout(()=>b.classList.remove('no'),500)}
+}
+function gEnd(s,n){
+  const pass=s/n>=.6;
+  if(pass){sfx('win');if(G.l<2&&unl[G.gi]<G.l+2)unl[G.gi]=G.l+2}
+  const nx=pass&&G.l<2;
+  $('#gb').innerHTML=`<div class="card text-center"><div class="text-5xl">${pass?'🎉':'💪'}</div>
+  <h3 class="text-2xl font-black mt-2">${pass?'Level selesai!':'Coba lagi, ya!'}</h3>
+  <p class="my-2">Skor: <b>${s}/${n}</b> ${'⭐'.repeat(s===n?3:pass?2:1)}</p>
+  <p class="text-sm mb-3">${pass?(nx?'Level berikutnya terbuka.':'Kamu menamatkan semua level game ini!'):'Butuh minimal 60% untuk lanjut.'}</p>
+  <div class="flex gap-2 justify-center flex-wrap">${nx?`<button class="btn" onclick="play(${G.gi},${G.l+1})">LEVEL BERIKUTNYA</button>`:''}
+  <button class="btn alt" onclick="play(${G.gi},${G.l})">ULANGI</button>
+  <button class="btn alt" onclick="openKuis()">DAFTAR KUIS</button></div></div>`;
+}
+</script>
+</body>
+</html>
